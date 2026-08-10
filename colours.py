@@ -23,7 +23,7 @@ class Colours:
 
     def top_colours(self):
         top_ten_colours = []
-        for colour in list(self.pixel_frequency)[:10]:
+        for colour in list(self.pixel_frequency)[:12]:
             hex_colour = "#{:02X}{:02X}{:02X}".format(*colour)
             top_ten_colours.append(hex_colour)
         return top_ten_colours

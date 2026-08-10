@@ -8,12 +8,15 @@ app = Flask(__name__)
 def home():
     if request.method == "POST":
         image = request.files["image"]
-        image = image.filename
-        print(f"FILENAME: {image}")
-        colours = Colours(image)
-        colour_list = colours.top_colours()
+        if image is None or image.filename == "":
+            return render_template("index.html")
+        else:
+            image = image.filename
+            print(f"FILENAME: {image}")
+            colours = Colours(image)
+            colour_list = colours.top_colours()
 
-        return render_template("colours.html", colour_list=colour_list)
+            return render_template("colours.html", colour_list=colour_list)
 
     return render_template("index.html")
 
