@@ -5,7 +5,7 @@ class Colours:
     def __init__(self, image):
         self.img = Image.open(image).convert("RGB")
         self.img.thumbnail((300, 300))
-        self.img.save(f"static/check_image/image.jpg")
+        self.img.save(image, "JPEG")
         self.img_array = np.array(self.img)
         self.pixels = self.img_array.reshape(-1, 3)
         self.pixels = (self.pixels // 32) * 32
