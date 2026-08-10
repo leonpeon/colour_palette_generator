@@ -1,26 +1,25 @@
-import matplotlib.pyplot as plt
-import numpy as np
-from PIL import Image
+from flask import Flask, render_template, request
+from colours import Colours
 
-img = Image.open("test_image.jpg").convert("RGB")
-img_array = np.array(img)
+app = Flask(__name__)
 
-pixels = img_array.reshape(-1, 3)
-pixels = (pixels // 32) * 32
-values, frequencies = np.unique(
-    pixels,
-    axis=0,
-    return_counts=True
-)
 
-frequency = dict(zip(map(lambda colour: tuple(map(int, colour)), values), map(int, frequencies)))
-pixel_frequency = dict(
-    sorted(frequency.items(), key=lambda item: item[1], reverse=True)
-)
+@app.route("/", methods=["GET", "POST"])
+def home():
+    if request.method == "POST":
+        image = request.files["image"]
+        image = image.filename
+        print(f"FILENAME: {image}")
+        colours = Colours(image)
+        colour_list = colours.top_colours()
 
-for colour, frequency in list(pixel_frequency.items())[:10]:
-    hex_colour = "#{:02X}{:02X}{:02X}".format(*colour)
-    print(f"Colour: {hex_colour} - {frequency}")
+        return render_template("colours.html", colour_list=colour_list)
 
-# plt.imshow(img)
-# plt.show()
+    return render_template("index.html")
+
+@app.route("/image", methods=["GET", "POST"])
+def show_image():
+    return render_template("colours.html")
+
+if __name__ == "__main__":
+    app.run(debug=True)
